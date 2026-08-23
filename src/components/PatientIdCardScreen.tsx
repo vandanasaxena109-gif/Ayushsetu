@@ -106,14 +106,20 @@ export const PatientIdCardScreen: React.FC<PatientIdCardScreenProps> = ({
             <div>
               <div className="text-[11px] text-[#9ff0fb]/80 font-medium">ABHA Status</div>
               <div className="font-extrabold text-[#9ff0fb] flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>{patientAuth.abhaId ? 'Linked ✓' : 'Linked ✓'}</span>
+                {patientAuth.abhaId ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Linked ✓</span>
+                  </>
+                ) : (
+                  <span className="text-white/70">Not Linked</span>
+                )}
               </div>
             </div>
           </div>
 
           <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-white/80">
-            <span>Ayushman Bharat: {patientAuth.ayushmanCard ? 'Verified ✓' : 'Not Linked'}</span>
+            <span>Ayushman Bharat: {patientAuth.ayushmanCard ? 'Linked ✓' : 'Not Linked'}</span>
             <span className="text-[10px] text-[#9ff0fb]">Valid Across Ayush OPDs</span>
           </div>
         </div>

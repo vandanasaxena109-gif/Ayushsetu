@@ -92,22 +92,36 @@ export const PatientProfileDetailsModal: React.FC<PatientProfileDetailsModalProp
               <div className="flex items-center justify-between pb-2 border-b border-[#bec8ca]/20">
                 <div>
                   <div className="text-[11px] text-[#6f797a]">ABHA ID Number</div>
-                  <div className="font-mono font-bold text-[#141d1f] text-sm">{patientAuth.abhaId || '91-4523-8890-1234'}</div>
+                  <div className="font-mono font-bold text-[#141d1f] text-sm">
+                    {patientAuth.abhaId || 'Not Linked'}
+                  </div>
                 </div>
-                <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> Linked ✓
-                </span>
+                {patientAuth.abhaId ? (
+                  <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-700" /> Linked ✓
+                  </span>
+                ) : (
+                  <span className="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    Not Linked
+                  </span>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-[11px] text-[#6f797a]">Ayushman Bharat Card</div>
                   <div className="font-mono font-bold text-[#141d1f] text-sm">
-                    {patientAuth.ayushmanCard || 'PMJAY-MH-449102'}
+                    {patientAuth.ayushmanCard || 'Not Linked'}
                   </div>
                 </div>
-                <span className="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  Verified ✓
-                </span>
+                {patientAuth.ayushmanCard ? (
+                  <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-700" /> Linked ✓
+                  </span>
+                ) : (
+                  <span className="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    Not Linked
+                  </span>
+                )}
               </div>
             </div>
           </div>
