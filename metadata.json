@@ -1,0 +1,6 @@
+{
+  "name": "AyushSetu - Health Intake & Clinical Triage",
+  "description": "Multilingual voice-first clinical pre-intake, medical document scanner, Ayurvedic health assessment, and doctor triage dashboard.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
