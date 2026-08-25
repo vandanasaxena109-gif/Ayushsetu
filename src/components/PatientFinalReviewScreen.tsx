@@ -9,8 +9,7 @@ import {
   FileText, 
   Pill, 
   AlertTriangle, 
-  Sparkles,
-  ShieldCheck
+  Sparkles
 } from 'lucide-react';
 import { 
   LanguageOption, 
@@ -18,6 +17,7 @@ import {
   AyurvedicAssessmentState, 
   DocumentScanRecord 
 } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface PatientFinalReviewScreenProps {
   currentLanguage: LanguageOption;
@@ -52,6 +52,8 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
   onSendToDoctor,
   onBack,
 }) => {
+  const t = getTranslation(currentLanguage.id);
+
   return (
     <main 
       id="patient-final-review-screen"
@@ -61,10 +63,10 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
       <header className="w-full max-w-3xl mx-auto flex items-center justify-between py-2">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{currentLanguage.id === 'hi' ? 'पीछे' : 'Back'}</span>
+          <span>{t.backBtn}</span>
         </button>
 
         <span className="text-xs font-extrabold text-[#00535b] bg-[#a9ece5]/40 px-3 py-1 rounded-full">
@@ -80,12 +82,10 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
             <span>Structured Clinical Case Dossier</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-[#141d1f] tracking-tight">
-            {currentLanguage.id === 'hi' ? 'आपका स्वास्थ्य विवरण तैयार है' : 'Your Health History is Ready'}
+            {t.patientSummaryTitle}
           </h1>
           <p className="text-xs sm:text-sm text-[#3e494a] mt-1 font-medium">
-            {currentLanguage.id === 'hi'
-              ? 'कृपया परामर्श से पहले अपने विवरण की समीक्षा करें।'
-              : 'Please review your structured details before sending to the physician.'}
+            {t.patientSummarySubtitle}
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
           </div>
           <button
             onClick={() => onEditSection('identity')}
-            className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg flex items-center gap-1"
+            className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit</span>
@@ -121,11 +121,11 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#bec8ca]/40 shadow-xs space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#bec8ca]/20">
             <div className="font-bold text-xs uppercase tracking-wider text-[#00535b] flex items-center gap-1.5">
-              <Activity className="w-4 h-4" /> Chief Concern & Symptoms
+              <Activity className="w-4 h-4" /> {t.symptomsTitle}
             </div>
             <button
               onClick={() => onEditSection('voice')}
-              className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-2.5 py-1 rounded-lg flex items-center gap-1"
+              className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit</span>
@@ -164,7 +164,7 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
             </div>
             <button
               onClick={() => onEditSection('documents')}
-              className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-2.5 py-1 rounded-lg flex items-center gap-1"
+              className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit</span>
@@ -192,11 +192,11 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#bec8ca]/40 shadow-xs space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#bec8ca]/20">
             <div className="font-bold text-xs uppercase tracking-wider text-[#00535b] flex items-center gap-1.5">
-              <FileText className="w-4 h-4" /> Ayurvedic Pariksha & Documents
+              <FileText className="w-4 h-4" /> {t.ayurvedicAssessmentTitle} & Docs
             </div>
             <button
               onClick={() => onEditSection('ayurveda')}
-              className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-2.5 py-1 rounded-lg flex items-center gap-1"
+              className="text-xs font-bold text-[#00535b] hover:bg-[#e6eff2] px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit</span>
@@ -230,9 +230,9 @@ export const PatientFinalReviewScreen: React.FC<PatientFinalReviewScreenProps> =
           <button
             id="btn-send-to-doctor"
             onClick={onSendToDoctor}
-            className="w-full min-h-[52px] bg-[#00535b] hover:bg-[#006d77] text-white py-3.5 px-6 rounded-2xl font-black text-base shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+            className="w-full min-h-[52px] bg-[#00535b] hover:bg-[#006d77] text-white py-3.5 px-6 rounded-2xl font-black text-base shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
           >
-            <span>{currentLanguage.id === 'hi' ? 'डॉक्टर को भेजें →' : 'Send to Doctor →'}</span>
+            <span>{t.sendToDoctorBtn}</span>
             <ArrowRight className="w-5 h-5" />
           </button>
           <p className="text-center text-xs text-[#6f797a] mt-2">

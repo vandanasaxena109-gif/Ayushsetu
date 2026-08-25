@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { SYMPTOM_OPTIONS } from '../data/mockData';
 import { LanguageOption, LanguageId } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface VoiceIntakeScreenProps {
   currentLanguage: LanguageOption;
@@ -41,6 +42,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
   onTriggerUrgentAlert,
   onNeedHelp,
 }) => {
+  const t = getTranslation(currentLanguage.id);
   const [isListening, setIsListening] = useState<boolean>(true);
   const [speechState, setSpeechState] = useState<'listening' | 'understanding' | 'idle'>('listening');
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
@@ -66,7 +68,25 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
         recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = currentLanguage.id === 'hi' ? 'hi-IN' : currentLanguage.id === 'mr' ? 'mr-IN' : 'en-US';
+        recognition.lang = currentLanguage.id === 'hi' 
+          ? 'hi-IN' 
+          : currentLanguage.id === 'mr' 
+          ? 'mr-IN' 
+          : currentLanguage.id === 'ta'
+          ? 'ta-IN'
+          : currentLanguage.id === 'te'
+          ? 'te-IN'
+          : currentLanguage.id === 'bn'
+          ? 'bn-IN'
+          : currentLanguage.id === 'gu'
+          ? 'gu-IN'
+          : currentLanguage.id === 'kn'
+          ? 'kn-IN'
+          : currentLanguage.id === 'ml'
+          ? 'ml-IN'
+          : currentLanguage.id === 'pa'
+          ? 'pa-IN'
+          : 'en-US';
 
         recognition.onresult = (event: any) => {
           setSpeechState('understanding');
@@ -146,9 +166,9 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
         <div className="flex justify-between items-center w-full px-4 md:px-8 max-w-[1200px] mx-auto h-20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#00535b] text-white flex items-center justify-center font-bold text-xl shadow-sm">
-              A
+              आ
             </div>
-            <span className="text-2xl font-bold text-[#00535b] tracking-tight">AyushSetu</span>
+            <span className="text-2xl font-bold text-[#00535b] tracking-tight">{t.appName}</span>
           </div>
 
           <div className="flex items-center gap-3 md:gap-6">
@@ -157,7 +177,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
               <Search className="w-4 h-4 text-[#3e494a] mr-2" />
               <input
                 type="text"
-                placeholder="Search symptoms or tests..."
+                placeholder="Search symptoms..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-transparent border-none focus:outline-none text-sm text-[#141d1f] placeholder-[#3e494a]/70 w-full"
@@ -169,7 +189,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
               <button
                 id="voice-lang-btn"
                 onClick={() => setShowLangMenu(!showLangMenu)}
-                className="flex items-center gap-2 hover:bg-[#a9ece5]/20 transition-colors px-3 py-1.5 rounded-lg border border-[#bec8ca]/30 text-[#00535b] font-semibold text-sm"
+                className="flex items-center gap-2 hover:bg-[#a9ece5]/20 transition-colors px-3 py-1.5 rounded-lg border border-[#bec8ca]/30 text-[#00535b] font-semibold text-sm cursor-pointer"
               >
                 <Globe className="w-4 h-4" />
                 <span>{currentLanguage.nativeName} ({currentLanguage.name})</span>
@@ -184,7 +204,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
                         onSelectLanguage(l.id);
                         setShowLangMenu(false);
                       }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between hover:bg-[#a9ece5]/20 ${
+                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between hover:bg-[#a9ece5]/20 cursor-pointer ${
                         l.id === currentLanguage.id ? 'font-bold text-[#00535b] bg-[#e6eff2]' : 'text-[#141d1f]'
                       }`}
                     >
@@ -201,7 +221,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
               <button 
                 onClick={onNeedHelp}
                 aria-label="Help" 
-                className="p-2 text-[#00535b] hover:bg-[#e6eff2] rounded-full transition-colors"
+                className="p-2 text-[#00535b] hover:bg-[#e6eff2] rounded-full transition-colors cursor-pointer"
               >
                 <HelpCircle className="w-6 h-6" />
               </button>
@@ -218,10 +238,10 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
         {/* Header Text */}
         <div className="text-center mb-5 sm:mb-8 w-full max-w-2xl">
           <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-[#141d1f] mb-1.5 sm:mb-2 tracking-tight">
-            What is bothering you today?
+            {t.voiceIntakeTitle}
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-[#3e494a]">
-            Speak naturally in your preferred language.
+            {t.voiceIntakeSubtitle}
           </p>
         </div>
 
@@ -239,7 +259,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
           <button
             id="mic-action-btn"
             onClick={toggleListening}
-            className={`relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-full shadow-[0px_8px_24px_rgba(0,109,119,0.25)] flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 group ${
+            className={`relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-full shadow-[0px_8px_24px_rgba(0,109,119,0.25)] flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 group cursor-pointer ${
               isListening ? 'bg-[#00535b] text-white' : 'bg-[#6f797a] text-white'
             }`}
           >
@@ -250,7 +270,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
           <div className="mt-4 sm:mt-6 flex flex-col items-center h-8">
             {speechState === 'listening' && (
               <div className="text-sm sm:text-base font-semibold text-[#00535b] flex items-center gap-2 sm:gap-3">
-                <span>Listening</span>
+                <span>{t.listening}</span>
                 <span className="flex gap-1">
                   <span className="w-2 h-2 rounded-full bg-[#00535b] animate-bounce"></span>
                   <span className="w-2 h-2 rounded-full bg-[#00535b] animate-bounce [animation-delay:0.2s]"></span>
@@ -260,13 +280,13 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
             )}
             {speechState === 'understanding' && (
               <div className="text-sm sm:text-base font-semibold text-[#236863] flex items-center gap-2 sm:gap-3">
-                <span>Processing Indian Language</span>
+                <span>Processing {currentLanguage.name} Voice</span>
                 <span className="w-2 h-2 rounded-full bg-[#236863] animate-ping"></span>
               </div>
             )}
             {speechState === 'idle' && (
               <span className="text-xs sm:text-sm font-medium text-[#3e494a]">
-                Mic paused. Tap to start speaking.
+                {t.tapToSpeak}
               </span>
             )}
           </div>
@@ -283,7 +303,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
                     onTriggerUrgentAlert('Chest pain with radiating symptoms reported.');
                   }
                 }}
-                className="text-[11px] sm:text-xs bg-white hover:bg-[#e6eff2] text-[#00535b] border border-[#bec8ca]/40 px-2.5 py-1 rounded-full transition-colors"
+                className="text-[11px] sm:text-xs bg-white hover:bg-[#e6eff2] text-[#00535b] border border-[#bec8ca]/40 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
               >
                 "{phrase.slice(0, 22)}..."
               </button>
@@ -312,14 +332,14 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
                 value={liveTranscript}
                 onChange={(e) => onUpdateTranscript(e.target.value)}
                 className="w-full bg-transparent border-0 focus:ring-0 p-0 text-base sm:text-lg md:text-xl text-[#141d1f] font-normal italic resize-none"
-                placeholder="Spoken symptoms will appear here in real time..."
+                placeholder={t.speakPrompt}
               />
             </div>
             <button
               id="audio-readout-btn"
               onClick={handleSpeakTranscript}
               aria-label="Listen"
-              className={`flex-shrink-0 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-colors ${
+              className={`flex-shrink-0 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-colors cursor-pointer ${
                 isPlayingAudio 
                   ? 'bg-[#00535b] text-white animate-pulse' 
                   : 'bg-[#e1eaed] hover:bg-[#bec8ca]/50 text-[#00535b]'
@@ -335,10 +355,10 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
           <div className="flex justify-between items-end mb-2.5 sm:mb-3">
             <div>
               <h2 className="text-sm sm:text-base md:text-lg font-bold text-[#141d1f]">
-                Or tap symptoms manually
+                {t.symptomsTitle}
               </h2>
               <p className="text-[11px] sm:text-xs text-[#3e494a]">
-                Select multiple if needed
+                {t.symptomsSubtitle}
               </p>
             </div>
             <span className="text-xs text-[#00535b] font-medium">
@@ -354,7 +374,7 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
                   key={sym.id}
                   id={`symptom-chip-${sym.id}`}
                   onClick={() => handleSymptomClick(sym)}
-                  className={`rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center gap-1 sm:gap-1.5 transition-all text-center border relative ${
+                  className={`rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center gap-1 sm:gap-1.5 transition-all text-center border relative cursor-pointer ${
                     isSelected
                       ? 'bg-[#a9ece5]/30 border-[#00535b] shadow-xs'
                       : 'bg-white hover:bg-[#f2fbfe] border-[#bec8ca]/40 text-[#141d1f]'
@@ -399,18 +419,18 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
         <div className="mt-6 sm:mt-8 w-full max-w-2xl flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
           <button
             onClick={onNeedHelp}
-            className="text-xs sm:text-sm text-[#00535b] font-semibold hover:underline flex items-center gap-1 order-2 sm:order-1"
+            className="text-xs sm:text-sm text-[#00535b] font-semibold hover:underline flex items-center gap-1 order-2 sm:order-1 cursor-pointer"
           >
             <HelpCircle className="w-4 h-4" />
-            Need assistance from desk?
+            {t.staffHelp}
           </button>
 
           <button
             id="voice-continue-btn"
             onClick={onContinue}
-            className="w-full sm:w-auto bg-[#00535b] hover:bg-[#006d77] text-white px-6 sm:px-8 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-[0px_4px_12px_rgba(0,109,119,0.15)] transition-all flex items-center justify-center gap-2 active:scale-[0.98] order-1 sm:order-2"
+            className="w-full sm:w-auto bg-[#00535b] hover:bg-[#006d77] text-white px-6 sm:px-8 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-[0px_4px_12px_rgba(0,109,119,0.15)] transition-all flex items-center justify-center gap-2 active:scale-[0.98] order-1 sm:order-2 cursor-pointer"
           >
-            <span>Proceed to Document Scan</span>
+            <span>{t.scanDocTitle}</span>
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>
@@ -420,10 +440,10 @@ export const VoiceIntakeScreen: React.FC<VoiceIntakeScreenProps> = ({
       <button
         id="voice-help-fab"
         onClick={onNeedHelp}
-        className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-30 bg-[#825b00] hover:bg-[#634500] text-white shadow-[0px_4px_16px_rgba(99,69,0,0.25)] rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-2 transition-all transform hover:scale-105 active:scale-95 font-semibold text-xs sm:text-base"
+        className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-30 bg-[#825b00] hover:bg-[#634500] text-white shadow-[0px_4px_16px_rgba(99,69,0,0.25)] rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-2 transition-all transform hover:scale-105 active:scale-95 font-semibold text-xs sm:text-base cursor-pointer"
       >
         <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-        <span>Need Help?</span>
+        <span>{t.staffHelp}</span>
       </button>
     </div>
   );

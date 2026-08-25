@@ -5,12 +5,13 @@ import {
   ArrowRight, 
   ArrowLeft, 
   CheckCircle2, 
-  Info,
-  Link2,
-  XCircle,
-  HelpCircle
+  Info, 
+  Link2, 
+  XCircle, 
+  HelpCircle 
 } from 'lucide-react';
 import { LanguageOption, PatientAuthData } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface PatientAbhaLinkScreenProps {
   currentLanguage: LanguageOption;
@@ -27,6 +28,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
   onContinue,
   onBack,
 }) => {
+  const t = getTranslation(currentLanguage.id);
   const [abhaInput, setAbhaInput] = useState(patientAuth.abhaId || '91-4523-8890-1234');
   const [isAbhaLinked, setIsAbhaLinked] = useState(!!patientAuth.abhaId);
   const [ayushmanInput, setAyushmanInput] = useState(patientAuth.ayushmanCard || '');
@@ -77,7 +79,6 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
   };
 
   const handleProceed = () => {
-    // Save current states
     onUpdatePatientAuth({
       ...patientAuth,
       abhaId: isAbhaLinked ? abhaInput.trim() : '',
@@ -98,7 +99,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
           className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{currentLanguage.id === 'hi' ? 'पीछे' : 'Back'}</span>
+          <span>{t.backBtn}</span>
         </button>
 
         <span className="text-xs font-extrabold text-[#00535b] bg-[#a9ece5]/40 px-3 py-1 rounded-full">
@@ -111,15 +112,13 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
         <div>
           <div className="inline-flex items-center gap-1.5 bg-[#00535b]/10 text-[#00535b] px-3 py-0.5 rounded-full text-xs font-bold mb-2">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>ABDM Integration • Link Existing ID Only</span>
+            <span>ABDM Integration • Link Existing ID</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-[#141d1f] tracking-tight">
-            {currentLanguage.id === 'hi' ? 'मौजूदा ABHA / आयुष्मान कार्ड लिंक करें' : 'Link Existing ABHA / Ayushman Card'}
+            {t.linkAbhaTitle}
           </h1>
           <p className="text-xs sm:text-sm text-[#3e494a] mt-1 font-medium">
-            {currentLanguage.id === 'hi'
-              ? 'यदि आपके पास पहले से ABHA या आयुष्मान कार्ड है, तो उसे यहाँ लिंक करें।'
-              : 'If you have an existing government ABHA or Ayushman Bharat Card, link it here.'}
+            {t.linkAbhaSubtitle}
           </p>
         </div>
 
@@ -129,12 +128,12 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
             <div className="flex items-start gap-2.5">
               <Info className="w-4 h-4 text-[#00535b] shrink-0 mt-0.5" />
               <p>
-                <strong>Important:</strong> Card creation is managed by the National Health Authority (NHA). AyushSetu only links your existing credentials or allows you to proceed directly with your AyushSetu Digital ID.
+                <strong>Important:</strong> Card creation is managed by National Health Authority (NHA). AyushSetu links your existing credentials or allows you to proceed with your digital token.
               </p>
             </div>
             <button 
               onClick={() => setShowInfoBanner(false)}
-              className="text-[#6f797a] hover:text-[#141d1f] text-xs font-bold p-1"
+              className="text-[#6f797a] hover:text-[#141d1f] text-xs font-bold p-1 cursor-pointer"
             >
               ✕
             </button>
@@ -150,7 +149,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
               </div>
               <div>
                 <h2 className="text-base sm:text-lg font-black text-[#141d1f] flex items-center gap-2">
-                  <span>Link Existing ABHA</span>
+                  <span>{t.linkAbhaTitle}</span>
                   {isAbhaLinked ? (
                     <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3 text-emerald-700" /> Linked
@@ -162,9 +161,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
                   )}
                 </h2>
                 <p className="text-xs text-[#3e494a]">
-                  {currentLanguage.id === 'hi'
-                    ? '14 अंकों का ABHA नंबर दर्ज करके लिंक करें।'
-                    : 'Enter your 14-digit ABHA number to link your health history.'}
+                  {t.linkAbhaSubtitle}
                 </p>
               </div>
             </div>
@@ -191,7 +188,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
                   className="bg-gray-100 hover:bg-gray-200 text-[#3e494a] px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <XCircle className="w-4 h-4 text-red-500" />
-                  <span>Unlink</span>
+                  <span>{t.unlinkBtn}</span>
                 </button>
               ) : (
                 <button
@@ -201,7 +198,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
                   className="bg-[#00535b] hover:bg-[#006d77] text-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Link2 className="w-4 h-4" />
-                  <span>Link ABHA</span>
+                  <span>{t.linkAbhaBtn}</span>
                 </button>
               )}
             </div>
@@ -238,7 +235,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
             </div>
             <div>
               <h2 className="text-base font-extrabold text-[#141d1f] flex items-center gap-2">
-                <span>Link Ayushman Bharat PM-JAY Card (Optional)</span>
+                <span>{t.ayushmanOptional}</span>
                 {isAyushmanVerified ? (
                   <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3 text-emerald-700" /> Linked
@@ -251,7 +248,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
               </h2>
               <p className="text-xs text-[#3e494a]">
                 {currentLanguage.id === 'hi'
-                  ? 'यदि आपके पास आयुष्मान कार्ड संख्या है तो उसे यहाँ लिंक करें।'
+                  ? 'यदि आपके पास आयुष्मान कार्ड संख्या है तो उसे यहाँ दर्ज करें।'
                   : 'If you have an existing PM-JAY card ID, link it to verify coverage.'}
               </p>
             </div>
@@ -278,7 +275,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
                   className="bg-gray-100 hover:bg-gray-200 text-[#3e494a] px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <XCircle className="w-4 h-4 text-red-500" />
-                  <span>Unlink</span>
+                  <span>{t.unlinkBtn}</span>
                 </button>
               ) : (
                 <button
@@ -288,7 +285,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
                   className="bg-[#236863] hover:bg-[#1a4f4b] text-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Link2 className="w-4 h-4" />
-                  <span>Link Card</span>
+                  <span>{t.linkAyushmanBtn}</span>
                 </button>
               )}
             </div>
@@ -302,7 +299,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
                 <button
                   type="button"
                   onClick={handleUnlinkAyushman}
-                  className="text-red-600 hover:underline"
+                  className="text-red-600 hover:underline cursor-pointer"
                 >
                   Clear
                 </button>
@@ -319,7 +316,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
             onClick={handleProceed}
             className="w-full min-h-[50px] bg-[#00535b] hover:bg-[#006d77] text-white py-3 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
           >
-            <span>{currentLanguage.id === 'hi' ? 'सत्यापन के साथ आगे बढ़ें' : 'Proceed to Mobile Verification'}</span>
+            <span>{t.continueBtn}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
           <div className="text-center">
@@ -332,7 +329,7 @@ export const PatientAbhaLinkScreen: React.FC<PatientAbhaLinkScreenProps> = ({
               }}
               className="text-xs text-[#3e494a] hover:text-[#00535b] font-bold underline cursor-pointer py-1"
             >
-              {currentLanguage.id === 'hi' ? 'कार्ड लिंक किए बिना जारी रखें' : 'Skip and continue without linking ABHA / Ayushman Card'}
+              Skip and continue without linking ABHA / Ayushman Card
             </button>
           </div>
         </div>

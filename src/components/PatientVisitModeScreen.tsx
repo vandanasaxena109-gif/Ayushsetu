@@ -1,16 +1,14 @@
 import React from 'react';
 import { 
   Mic, 
-  Touchpad, 
   Hand, 
   Headphones, 
   ArrowRight, 
   ArrowLeft, 
-  Volume2, 
-  Sparkles,
-  ShieldCheck
+  Sparkles
 } from 'lucide-react';
 import { LanguageOption } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface PatientVisitModeScreenProps {
   currentLanguage: LanguageOption;
@@ -23,6 +21,8 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
   onSelectMode,
   onBack,
 }) => {
+  const t = getTranslation(currentLanguage.id);
+
   return (
     <main 
       id="patient-visit-mode-screen"
@@ -32,10 +32,10 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
       <header className="w-full max-w-4xl mx-auto flex items-center justify-between py-2">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{currentLanguage.id === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}</span>
+          <span>{t.backBtn}</span>
         </button>
 
         <span className="text-xs font-extrabold text-[#00535b] bg-[#a9ece5]/40 px-3 py-1 rounded-full">
@@ -51,12 +51,10 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
             <span>Inclusive Multilingual Case-Taking</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#141d1f] tracking-tight">
-            {currentLanguage.id === 'hi' ? 'आइए समझें कि आप कैसा महसूस कर रहे हैं' : "Let's understand how you're feeling"}
+            {t.voiceIntakeTitle}
           </h1>
           <p className="text-sm sm:text-base text-[#3e494a] max-w-xl mx-auto mt-2 font-medium">
-            {currentLanguage.id === 'hi'
-              ? 'आप अपनी पसंदीदा भाषा में बोल सकते हैं या सरल विकल्प चुन सकते हैं।'
-              : 'You can speak in your preferred language or choose simple answers.'}
+            {t.voiceIntakeSubtitle}
           </p>
         </div>
 
@@ -66,7 +64,7 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
           <button
             id="mode-btn-speak"
             onClick={() => onSelectMode('voice')}
-            className="group bg-white hover:bg-[#f8fdfe] border-2 border-[#00535b] p-6 sm:p-7 rounded-3xl shadow-[0px_8px_28px_rgba(0,109,119,0.12)] hover:shadow-[0px_12px_36px_rgba(0,109,119,0.2)] transition-all flex flex-col justify-between min-h-[240px] text-left relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#00535b]/20 active:scale-[0.98]"
+            className="group bg-white hover:bg-[#f8fdfe] border-2 border-[#00535b] p-6 sm:p-7 rounded-3xl shadow-[0px_8px_28px_rgba(0,109,119,0.12)] hover:shadow-[0px_12px_36px_rgba(0,109,119,0.2)] transition-all flex flex-col justify-between min-h-[240px] text-left relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#00535b]/20 active:scale-[0.98] cursor-pointer"
           >
             <div className="absolute top-0 right-0 w-24 h-24 bg-[#a9ece5]/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-125 transition-transform"></div>
             <div>
@@ -74,21 +72,19 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
                 <Mic className="w-7 h-7" />
               </div>
               <div className="bg-[#a9ece5]/60 text-[#00535b] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full inline-block mb-1.5">
-                Recommended • बोलकर बताएं
+                Recommended • {t.speakPrompt}
               </div>
               <h2 className="text-xl font-black text-[#141d1f] mb-1">
-                🎙️ {currentLanguage.id === 'hi' ? 'बोलें' : 'Speak'}
+                🎙️ {t.speakPrompt}
               </h2>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'अपने शब्दों में अपनी भाषा में खुलकर बताएं'
-                  : 'Tell us in your own words naturally in your language'}
+                {t.voiceIntakeSubtitle}
               </p>
             </div>
 
             <div className="pt-4 flex items-center justify-between border-t border-[#bec8ca]/30 mt-4">
               <span className="text-xs sm:text-sm font-extrabold text-[#00535b]">
-                {currentLanguage.id === 'hi' ? 'आवाज से शुरू करें →' : 'Start Voice Intake →'}
+                {t.tapToSpeak} →
               </span>
               <div className="w-8 h-8 rounded-full bg-[#ecf5f8] text-[#00535b] flex items-center justify-center group-hover:bg-[#00535b] group-hover:text-white transition-colors">
                 <ArrowRight className="w-4 h-4" />
@@ -100,25 +96,23 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
           <button
             id="mode-btn-tap"
             onClick={() => onSelectMode('touch')}
-            className="group bg-white hover:bg-[#f8fdfe] border-2 border-[#bec8ca]/40 hover:border-[#00535b] p-6 sm:p-7 rounded-3xl shadow-[0px_6px_24px_rgba(0,109,119,0.06)] hover:shadow-[0px_10px_32px_rgba(0,109,119,0.14)] transition-all flex flex-col justify-between min-h-[240px] text-left relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#00535b]/20 active:scale-[0.98]"
+            className="group bg-white hover:bg-[#f8fdfe] border-2 border-[#bec8ca]/40 hover:border-[#00535b] p-6 sm:p-7 rounded-3xl shadow-[0px_6px_24px_rgba(0,109,119,0.06)] hover:shadow-[0px_10px_32px_rgba(0,109,119,0.14)] transition-all flex flex-col justify-between min-h-[240px] text-left relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#00535b]/20 active:scale-[0.98] cursor-pointer"
           >
             <div>
               <div className="w-14 h-14 rounded-2xl bg-[#236863] text-white flex items-center justify-center mb-4 shadow-md group-hover:scale-105 transition-transform">
                 <Hand className="w-7 h-7" />
               </div>
               <h2 className="text-xl font-black text-[#141d1f] mb-1">
-                👆 {currentLanguage.id === 'hi' ? 'टच करके चुनें' : 'Tap Answers'}
+                👆 {t.symptomsTitle}
               </h2>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'स्क्रीन पर दिखाए गए सरल विकल्पों में से चुनें'
-                  : 'Choose from simple visual symptom icons & body map'}
+                {t.symptomsSubtitle}
               </p>
             </div>
 
             <div className="pt-4 flex items-center justify-between border-t border-[#bec8ca]/30 mt-4">
               <span className="text-xs sm:text-sm font-extrabold text-[#236863]">
-                {currentLanguage.id === 'hi' ? 'टच मोड चुनें →' : 'Choose Tap Mode →'}
+                {t.continueBtn} →
               </span>
               <div className="w-8 h-8 rounded-full bg-[#ecf5f8] text-[#236863] flex items-center justify-center group-hover:bg-[#236863] group-hover:text-white transition-colors">
                 <ArrowRight className="w-4 h-4" />
@@ -130,25 +124,23 @@ export const PatientVisitModeScreen: React.FC<PatientVisitModeScreenProps> = ({
           <button
             id="mode-btn-staff"
             onClick={() => onSelectMode('staff')}
-            className="group bg-white hover:bg-[#f8fdfe] border-2 border-[#bec8ca]/40 hover:border-[#00535b] p-6 sm:p-7 rounded-3xl shadow-[0px_6px_24px_rgba(0,109,119,0.06)] hover:shadow-[0px_10px_32px_rgba(0,109,119,0.14)] transition-all flex flex-col justify-between min-h-[240px] text-left relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#00535b]/20 active:scale-[0.98]"
+            className="group bg-white hover:bg-[#f8fdfe] border-2 border-[#bec8ca]/40 hover:border-[#00535b] p-6 sm:p-7 rounded-3xl shadow-[0px_6px_24px_rgba(0,109,119,0.06)] hover:shadow-[0px_10px_32px_rgba(0,109,119,0.14)] transition-all flex flex-col justify-between min-h-[240px] text-left relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#00535b]/20 active:scale-[0.98] cursor-pointer"
           >
             <div>
               <div className="w-14 h-14 rounded-2xl bg-[#525e75] text-white flex items-center justify-center mb-4 shadow-md group-hover:scale-105 transition-transform">
                 <Headphones className="w-7 h-7" />
               </div>
               <h2 className="text-xl font-black text-[#141d1f] mb-1">
-                👨‍⚕️ {currentLanguage.id === 'hi' ? 'स्टाफ सहायता' : 'Staff Assisted'}
+                👨‍⚕️ {t.staffHelp}
               </h2>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'अस्पताल के स्वास्थ्य सहायक से मदद प्राप्त करें'
-                  : 'Get hands-on help from on-premise hospital staff'}
+                Get assistance directly from hospital reception staff
               </p>
             </div>
 
             <div className="pt-4 flex items-center justify-between border-t border-[#bec8ca]/30 mt-4">
               <span className="text-xs sm:text-sm font-extrabold text-[#525e75]">
-                {currentLanguage.id === 'hi' ? 'सहायता बुलाएं →' : 'Request Staff Help →'}
+                {t.staffHelp} →
               </span>
               <div className="w-8 h-8 rounded-full bg-[#ecf5f8] text-[#525e75] flex items-center justify-center group-hover:bg-[#525e75] group-hover:text-white transition-colors">
                 <ArrowRight className="w-4 h-4" />

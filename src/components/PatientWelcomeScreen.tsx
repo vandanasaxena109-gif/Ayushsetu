@@ -6,13 +6,10 @@ import {
   ArrowLeft, 
   Headphones, 
   ShieldCheck, 
-  Sparkles,
-  Heart,
-  Globe2,
-  FileCheck2
 } from 'lucide-react';
 import { LanguageOption, LanguageId } from '../types';
 import { LANGUAGES } from '../data/mockData';
+import { getTranslation } from '../data/translations';
 
 interface PatientWelcomeScreenProps {
   currentLanguage: LanguageOption;
@@ -37,6 +34,8 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
   onBackToRole,
   onStaffHelp,
 }) => {
+  const t = getTranslation(currentLanguage.id);
+
   const handleNewClick = () => {
     if (onSelectNewPatient) onSelectNewPatient();
     else if (onNewPatient) onNewPatient();
@@ -59,16 +58,16 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
           className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{currentLanguage.id === 'hi' ? 'मुख्य पृष्ठ' : 'Role Selection'}</span>
+          <span>{t.backBtn}</span>
         </button>
 
         {onSelectLanguage && (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#3e494a] hidden sm:inline">Language:</span>
+            <span className="text-xs text-[#3e494a] hidden sm:inline">{t.selectLanguage}:</span>
             <select
               value={currentLanguage.id}
               onChange={(e) => onSelectLanguage(e.target.value as LanguageId)}
-              className="bg-white border border-[#bec8ca]/50 text-[#00535b] font-bold text-xs sm:text-sm rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-[#00535b]"
+              className="bg-white border border-[#bec8ca]/50 text-[#00535b] font-bold text-xs sm:text-sm rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-[#00535b] cursor-pointer"
             >
               {languages.map((l) => (
                 <option key={l.id} value={l.id}>
@@ -84,16 +83,14 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
       <div className="w-full max-w-3xl mx-auto my-auto py-6 text-center">
         <div className="inline-flex items-center gap-2 bg-[#a9ece5]/40 text-[#00535b] px-3.5 py-1 rounded-full text-xs font-extrabold mb-3">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>AyushSetu Digital Health Kiosk</span>
+          <span>{t.kioskBadge}</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-black text-[#141d1f] tracking-tight mb-2">
-          {currentLanguage.id === 'hi' ? 'आयुष सेतु में आपका स्वागत है' : 'Welcome to AyushSetu'}
+          {t.appName}
         </h1>
         <p className="text-sm sm:text-base text-[#3e494a] max-w-xl mx-auto mb-8 font-medium">
-          {currentLanguage.id === 'hi'
-            ? 'आइए आपका सुरक्षित स्वास्थ्य प्रोफाइल तैयार करें।'
-            : "Let's create your secure health profile."}
+          {t.tagline}
         </p>
 
         {/* 2 Large Action Cards */}
@@ -105,12 +102,10 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
                 <UserPlus className="w-6 h-6" />
               </div>
               <h2 className="text-xl font-bold text-[#141d1f] mb-1">
-                {currentLanguage.id === 'hi' ? 'नया मरीज' : 'New Patient'}
+                {t.newPatient}
               </h2>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi' 
-                  ? 'अपना नया आयुष सेतु स्वास्थ्य प्रोफाइल बनाएं'
-                  : 'Create your AyushSetu health profile'}
+                {t.newPatientDesc}
               </p>
             </div>
 
@@ -119,7 +114,7 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
               onClick={handleNewClick}
               className="mt-6 w-full min-h-[48px] bg-[#00535b] hover:bg-[#006d77] text-white py-2.5 px-4 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
             >
-              <span>{currentLanguage.id === 'hi' ? 'प्रोफ़ाइल बनाएं' : 'Create Profile'}</span>
+              <span>{t.createProfile}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -131,12 +126,10 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
                 <CreditCard className="w-6 h-6" />
               </div>
               <h2 className="text-xl font-bold text-[#141d1f] mb-1">
-                {currentLanguage.id === 'hi' ? 'पुनः आने वाले मरीज' : 'Returning Patient'}
+                {t.returningPatient}
               </h2>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'अपनी पूर्व स्वास्थ्य प्रोफ़ाइल और पर्चियों तक पहुंचें'
-                  : 'Access your existing health profile & past records'}
+                {t.returningPatientDesc}
               </p>
             </div>
 
@@ -145,7 +138,7 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
               onClick={handleReturningClick}
               className="mt-6 w-full min-h-[48px] bg-[#236863] hover:bg-[#1a4f4b] text-white py-2.5 px-4 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
             >
-              <span>{currentLanguage.id === 'hi' ? 'ABHA / मोबाइल से जारी रखें' : 'Continue with ABHA'}</span>
+              <span>{t.continueWithAbha}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -156,10 +149,10 @@ export const PatientWelcomeScreen: React.FC<PatientWelcomeScreenProps> = ({
       <footer className="w-full max-w-3xl mx-auto flex items-center justify-center pt-4">
         <button
           onClick={onStaffHelp}
-          className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#00535b] hover:bg-[#e6eff2] px-4 py-2 rounded-xl transition-colors"
+          className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#00535b] hover:bg-[#e6eff2] px-4 py-2 rounded-xl transition-colors cursor-pointer"
         >
           <Headphones className="w-4 h-4 text-[#00535b]" />
-          <span>Need Help? 👨‍⚕️</span>
+          <span>{t.staffHelp} 👨‍⚕️</span>
         </button>
       </footer>
     </main>

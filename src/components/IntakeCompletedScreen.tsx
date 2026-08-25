@@ -3,7 +3,6 @@ import {
   CheckCircle, 
   QrCode, 
   Clock, 
-  ArrowRight, 
   Stethoscope, 
   FileCheck, 
   LogOut,
@@ -13,6 +12,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { PatientData, LanguageOption } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface IntakeCompletedScreenProps {
   patient: PatientData;
@@ -29,6 +29,9 @@ export const IntakeCompletedScreen: React.FC<IntakeCompletedScreenProps> = ({
   onViewDoctorPortal,
   onEndSession,
 }) => {
+  const langId = currentLanguage?.id || 'en';
+  const t = getTranslation(langId);
+
   return (
     <main 
       id="intake-completed-screen"
@@ -45,10 +48,10 @@ export const IntakeCompletedScreen: React.FC<IntakeCompletedScreenProps> = ({
         </span>
 
         <h1 className="text-2xl sm:text-3xl font-black text-[#141d1f] mb-1.5 sm:mb-2">
-          Your Information Has Been Sent
+          {t.intakeCompleteTitle}
         </h1>
         <p className="text-xs sm:text-sm text-[#3e494a] mb-5 sm:mb-6 max-w-md font-medium">
-          Your health history is ready for your doctor. Dr. Anand Sharma will review it before your consultation.
+          {t.intakeCompleteSubtitle}
         </p>
 
         {/* Identity & Health Identifier Badge */}
@@ -66,7 +69,7 @@ export const IntakeCompletedScreen: React.FC<IntakeCompletedScreenProps> = ({
         {/* Token Card */}
         <div className="w-full bg-[#f2fbfe] border-2 border-[#00535b]/20 rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 flex items-center justify-between">
           <div className="text-left">
-            <span className="text-[10px] sm:text-xs font-bold text-[#3e494a] uppercase">Your Queue Token</span>
+            <span className="text-[10px] sm:text-xs font-bold text-[#3e494a] uppercase">{t.queueToken}</span>
             <div className="text-3xl sm:text-4xl font-black text-[#00535b] tracking-tight">{patient.tokenNumber}</div>
             <div className="text-xs text-[#236863] mt-0.5 sm:mt-1 font-bold flex items-center gap-1">
               <Building2 className="w-3.5 h-3.5" />
@@ -84,7 +87,7 @@ export const IntakeCompletedScreen: React.FC<IntakeCompletedScreenProps> = ({
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full mb-6 text-left">
           <div className="bg-[#ecf5f8] rounded-xl p-3 border border-[#bec8ca]/30">
             <div className="flex items-center gap-1.5 text-xs text-[#3e494a] font-semibold mb-0.5">
-              <Clock className="w-3.5 h-3.5 text-[#00535b]" /> Est. Wait Time
+              <Clock className="w-3.5 h-3.5 text-[#00535b]" /> {t.waitTime}
             </div>
             <div className="text-sm font-bold text-[#141d1f]">{patient.waitTime || '5 mins'}</div>
           </div>
@@ -101,35 +104,35 @@ export const IntakeCompletedScreen: React.FC<IntakeCompletedScreenProps> = ({
           <button
             id="btn-consult-with-doctor"
             onClick={onConsultDoctor}
-            className="w-full bg-[#00535b] hover:bg-[#006d77] text-white py-3.5 px-6 rounded-xl font-black text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+            className="w-full bg-[#00535b] hover:bg-[#006d77] text-white py-3.5 px-6 rounded-xl font-black text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
           >
             <Video className="w-5 h-5" />
-            <span>Consult with Doctor Now →</span>
+            <span>{t.consultDoctorBtn} →</span>
           </button>
 
           <div className="flex gap-2">
             <button
               id="view-doctor-portal-btn"
               onClick={onViewDoctorPortal}
-              className="flex-1 bg-[#ecf5f8] hover:bg-[#a9ece5]/40 text-[#00535b] border border-[#00535b]/20 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
+              className="flex-1 bg-[#ecf5f8] hover:bg-[#a9ece5]/40 text-[#00535b] border border-[#00535b]/20 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Stethoscope className="w-4 h-4" />
-              <span>Doctor Portal View</span>
+              <span>{t.doctorDashboard}</span>
             </button>
 
             <button
               id="btn-end-patient-session"
               onClick={onEndSession}
-              className="flex-1 bg-white border border-[#bec8ca] text-[#3e494a] hover:text-red-700 hover:bg-red-50 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
+              className="flex-1 bg-white border border-[#bec8ca] text-[#3e494a] hover:text-red-700 hover:bg-red-50 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
-              <span>End Session</span>
+              <span>{t.logoutBtn}</span>
             </button>
           </div>
         </div>
 
         <p className="text-[11px] text-[#6f797a] mt-4">
-          Tapping "End Session" clears temporary patient session state for the next user.
+          Tapping "{t.logoutBtn}" clears temporary patient session state for the next user.
         </p>
       </div>
     </main>

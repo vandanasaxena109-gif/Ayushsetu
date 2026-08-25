@@ -11,6 +11,7 @@ import {
   Smartphone
 } from 'lucide-react';
 import { LanguageOption, PatientAuthData } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface PatientOtpVerifyScreenProps {
   currentLanguage: LanguageOption;
@@ -27,6 +28,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
   onVerifySuccess,
   onBack,
 }) => {
+  const t = getTranslation(currentLanguage.id);
   const displayPhone = phoneNumber || patientAuth?.phone || '98765 44582';
   const [otp, setOtp] = useState('');
   const [countdown, setCountdown] = useState(30);
@@ -44,9 +46,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
 
   const handleReadAloud = () => {
     setIsSpeaking(true);
-    const msg = currentLanguage.id === 'hi'
-      ? `हमने आपके मोबाइल नंबर ${displayPhone} पर 6 अंकों का ओटीपी भेजा है। कृपया इसे नीचे दर्ज करें।`
-      : `We sent a 6-digit verification code to your mobile number ${displayPhone}. Please enter it below.`;
+    const msg = `${t.otpTitle}. Sent to ${displayPhone}.`;
     
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -93,10 +93,10 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
       <header className="w-full max-w-md mx-auto flex items-center justify-between py-2">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#00535b] hover:bg-[#e6eff2] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{currentLanguage.id === 'hi' ? 'पीछे' : 'Back'}</span>
+          <span>{t.backBtn}</span>
         </button>
 
         <span className="text-xs font-extrabold text-[#00535b] bg-[#a9ece5]/40 px-3 py-1 rounded-full">
@@ -111,12 +111,10 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
             <Smartphone className="w-7 h-7" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-[#141d1f] tracking-tight">
-            {currentLanguage.id === 'hi' ? 'अपना मोबाइल नंबर सत्यापित करें' : 'Verify Your Mobile Number'}
+            {t.otpTitle}
           </h1>
           <p className="text-xs sm:text-sm text-[#3e494a] mt-1 font-medium">
-            {currentLanguage.id === 'hi'
-              ? `हमने आपके मोबाइल नंबर ${displayPhone} पर एक सत्यापन कोड भेजा है।`
-              : `We sent a verification code to ${displayPhone}.`}
+            {t.otpSubtitle} {displayPhone}
           </p>
         </div>
 
@@ -125,14 +123,14 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
           <button
             type="button"
             onClick={handleReadAloud}
-            className={`flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl transition-all border ${
+            className={`flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl transition-all border cursor-pointer ${
               isSpeaking
                 ? 'bg-amber-100 text-amber-900 border-amber-300 animate-pulse'
                 : 'bg-[#f2fbfe] text-[#00535b] border-[#bec8ca]/50 hover:bg-[#e6eff2]'
             }`}
           >
             <Volume2 className="w-4 h-4 text-[#00535b]" />
-            <span>{isSpeaking ? 'बोल रहे हैं…' : '🔊 Read OTP instructions aloud'}</span>
+            <span>{isSpeaking ? 'Reading aloud...' : '🔊 Read OTP instructions aloud'}</span>
           </button>
         </div>
 
@@ -141,7 +139,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
           <button
             type="button"
             onClick={handleAutoFillDemo}
-            className="inline-flex items-center gap-1.5 text-xs text-[#00535b] font-bold bg-[#a9ece5]/30 hover:bg-[#a9ece5]/60 px-3 py-1 rounded-lg transition-colors border border-[#00535b]/20"
+            className="inline-flex items-center gap-1.5 text-xs text-[#00535b] font-bold bg-[#a9ece5]/30 hover:bg-[#a9ece5]/60 px-3 py-1 rounded-lg transition-colors border border-[#00535b]/20 cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" /> Auto-fill Demo OTP (445821)
           </button>
@@ -153,7 +151,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
               htmlFor="otp-input"
               className="block text-center text-xs font-bold text-[#141d1f] uppercase tracking-wider mb-2"
             >
-              {currentLanguage.id === 'hi' ? '6 अंकों का ओटीपी दर्ज करें' : 'Enter 6-Digit OTP'}
+              {t.enterOtp}
             </label>
             <input
               id="otp-input"
@@ -179,7 +177,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
             id="btn-verify-otp"
             type="submit"
             disabled={isVerifying}
-            className="w-full min-h-[50px] bg-[#00535b] hover:bg-[#006d77] text-white py-3 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
+            className="w-full min-h-[50px] bg-[#00535b] hover:bg-[#006d77] text-white py-3 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
           >
             {isVerifying ? (
               <span className="flex items-center gap-2">
@@ -187,7 +185,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
               </span>
             ) : (
               <span className="flex items-center gap-2">
-                <span>{currentLanguage.id === 'hi' ? 'सत्यापित करें' : 'Verify & Continue'}</span>
+                <span>{t.verifyOtpBtn}</span>
                 <ArrowRight className="w-4 h-4" />
               </span>
             )}
@@ -203,9 +201,9 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
               <button
                 type="button"
                 onClick={handleResend}
-                className="text-xs font-bold text-[#00535b] hover:underline flex items-center justify-center gap-1 mx-auto"
+                className="text-xs font-bold text-[#00535b] hover:underline flex items-center justify-center gap-1 mx-auto cursor-pointer"
               >
-                <RefreshCw className="w-3.5 h-3.5" /> Resend OTP
+                <RefreshCw className="w-3.5 h-3.5" /> {t.resendOtp}
               </button>
             )}
           </div>
@@ -214,7 +212,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
 
       <footer className="w-full max-w-md mx-auto text-center pt-2">
         <p className="text-xs text-[#6f797a]">
-          AyushSetu • OTP verification via National Health Portal SMS gateway
+          AyushSetu • Secure OTP verification
         </p>
       </footer>
     </main>

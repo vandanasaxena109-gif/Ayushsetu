@@ -390,6 +390,7 @@ export function App() {
         {/* Screen 11: Document & Camera Scanner */}
         {activeScreen === 'document-scanner' && (
           <DocumentScannerScreen
+            currentLanguage={currentLanguage}
             onScanComplete={handleScanComplete}
             onSkip={() => setActiveScreen('ayurvedic-assessment')}
             onClose={() => setActiveScreen('voice-intake')}

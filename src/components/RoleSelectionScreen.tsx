@@ -6,10 +6,10 @@ import {
   Shield, 
   Building2, 
   Sparkles,
-  HeartHandshake,
   Globe2
 } from 'lucide-react';
 import { LanguageOption } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface RoleSelectionScreenProps {
   currentLanguage: LanguageOption;
@@ -30,6 +30,8 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
   onLanguageClick,
   onStaffHelp,
 }) => {
+  const t = getTranslation(currentLanguage.id);
+
   const handlePatientClick = () => {
     if (onSelectRole) onSelectRole('patient');
     if (onSelectPatient) onSelectPatient();
@@ -41,6 +43,7 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
   };
 
   const handleLangClick = onLanguageClick || onChangeLanguage;
+
   return (
     <main 
       id="role-selection-screen"
@@ -53,15 +56,18 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
             आ
           </div>
           <div>
-            <div className="text-xl font-extrabold text-[#00535b] tracking-tight">AyushSetu</div>
-            <div className="text-[10px] text-[#3e494a] font-semibold tracking-wider uppercase">आयुष सेतु • National Intake Platform</div>
+            <div className="text-xl font-extrabold text-[#00535b] tracking-tight">{t.appName}</div>
+            <div className="text-[10px] text-[#3e494a] font-semibold tracking-wider uppercase">
+              {t.kioskBadge}
+            </div>
           </div>
         </div>
 
         {handleLangClick && (
           <button
+            id="role-language-selector-btn"
             onClick={handleLangClick}
-            className="flex items-center gap-1.5 bg-white border border-[#bec8ca]/50 hover:border-[#00535b] text-[#00535b] px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs"
+            className="flex items-center gap-1.5 bg-white border border-[#bec8ca]/50 hover:border-[#00535b] text-[#00535b] px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
             <Globe2 className="w-3.5 h-3.5" />
             <span>{currentLanguage.nativeName} ({currentLanguage.name})</span>
@@ -78,7 +84,7 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
         </div>
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#141d1f] tracking-tight mb-3">
-          Your health history, ready before you meet the doctor
+          {t.tagline}
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-[#3e494a] max-w-2xl mx-auto mb-8 sm:mb-12 font-medium">
           {currentLanguage.id === 'hi' 
@@ -89,10 +95,10 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
         {/* Question Heading */}
         <div className="text-left max-w-2xl mx-auto mb-4">
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#141d1f]">
-            Who are you?
+            {t.selectRole}
           </h2>
           <p className="text-xs sm:text-sm text-[#6f797a]">
-            Please select your portal to begin.
+            {currentLanguage.id === 'hi' ? 'कृपया अपनी सुविधा अनुसार पोर्टल चुनें।' : 'Please select your portal to begin.'}
           </p>
         </div>
 
@@ -111,16 +117,16 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
                 <User className="w-7 h-7" />
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-[#141d1f] mb-1.5 flex items-center gap-2">
-                <span>🧑‍🦱 I am a Patient</span>
+                <span>{t.patientRoleTitle}</span>
               </h3>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                Start or continue your health journey with voice, touch, or ABHA.
+                {t.patientRoleDesc}
               </p>
             </div>
 
             <div className="pt-6 flex items-center justify-between border-t border-[#bec8ca]/30 mt-4">
               <span className="text-sm font-extrabold text-[#00535b] group-hover:underline">
-                Patient →
+                {t.continueBtn} →
               </span>
               <div className="w-9 h-9 rounded-full bg-[#ecf5f8] text-[#00535b] flex items-center justify-center group-hover:bg-[#00535b] group-hover:text-white transition-colors">
                 <ArrowRight className="w-4 h-4" />
@@ -141,10 +147,10 @@ export const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({
                 <Stethoscope className="w-7 h-7" />
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-[#141d1f] mb-1.5 flex items-center gap-2">
-                <span>👨‍⚕️ I am a Doctor / Staff</span>
+                <span>{t.doctorRoleTitle}</span>
               </h3>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                Access patient records, clinical summaries, and triage queue.
+                {t.doctorRoleDesc}
               </p>
             </div>
 

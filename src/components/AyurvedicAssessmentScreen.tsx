@@ -7,14 +7,15 @@ import {
   Frown, 
   Moon, 
   Sparkles, 
-  Heart,
-  CheckCircle,
-  HelpCircle,
-  User,
-  Globe
+  Heart, 
+  CheckCircle, 
+  HelpCircle, 
+  User, 
+  Globe 
 } from 'lucide-react';
 import { AYURVEDIC_QUESTIONS } from '../data/mockData';
 import { AyurvedicAssessmentState, LanguageOption, LanguageId } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface AyurvedicAssessmentScreenProps {
   currentLanguage: LanguageOption;
@@ -37,6 +38,7 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
   onBack,
   onStaffHelp,
 }) => {
+  const t = getTranslation(currentLanguage.id);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [showLangMenu, setShowLangMenu] = useState<boolean>(false);
 
@@ -72,9 +74,9 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
         <div className="flex justify-between items-center w-full px-4 md:px-8 max-w-[1200px] mx-auto h-20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#00535b] text-white flex items-center justify-center font-bold text-xl shadow-sm">
-              A
+              आ
             </div>
-            <span className="text-2xl font-bold text-[#00535b] tracking-tight">AyushSetu</span>
+            <span className="text-2xl font-bold text-[#00535b] tracking-tight">{t.appName}</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -82,7 +84,7 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
             <div className="relative">
               <button
                 onClick={() => setShowLangMenu(!showLangMenu)}
-                className="flex items-center gap-2 hover:bg-[#a9ece5]/20 transition-colors px-3 py-1.5 rounded-lg border border-[#bec8ca]/30 text-[#00535b] font-semibold text-sm"
+                className="flex items-center gap-2 hover:bg-[#a9ece5]/20 transition-colors px-3 py-1.5 rounded-lg border border-[#bec8ca]/30 text-[#00535b] font-semibold text-sm cursor-pointer"
               >
                 <Globe className="w-4 h-4" />
                 <span>{currentLanguage.nativeName} ({currentLanguage.name})</span>
@@ -97,7 +99,7 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
                         onSelectLanguage(l.id);
                         setShowLangMenu(false);
                       }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between hover:bg-[#a9ece5]/20 ${
+                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between hover:bg-[#a9ece5]/20 cursor-pointer ${
                         l.id === currentLanguage.id ? 'font-bold text-[#00535b] bg-[#e6eff2]' : 'text-[#141d1f]'
                       }`}
                     >
@@ -111,7 +113,7 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
 
             <button 
               onClick={onStaffHelp}
-              className="p-2 text-[#00535b] hover:bg-[#e6eff2] rounded-full transition-colors"
+              className="p-2 text-[#00535b] hover:bg-[#e6eff2] rounded-full transition-colors cursor-pointer"
             >
               <HelpCircle className="w-6 h-6" />
             </button>
@@ -130,7 +132,7 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
             <button
               id="assessment-back-btn"
               onClick={handlePrev}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[#bec8ca]/50 bg-white flex items-center justify-center text-[#00535b] hover:bg-[#e6eff2] shadow-xs transition-colors shrink-0"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[#bec8ca]/50 bg-white flex items-center justify-center text-[#00535b] hover:bg-[#e6eff2] shadow-xs transition-colors shrink-0 cursor-pointer"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -150,10 +152,10 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
           </div>
 
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#00535b] mb-1">
-            Ayurvedic Health Assessment
+            {t.ayurvedicAssessmentTitle}
           </h1>
           <p className="text-xs sm:text-base text-[#3e494a]">
-            A few simple questions based on traditional Ayurvedic assessment.
+            {t.ayurvedicAssessmentSubtitle}
           </p>
         </div>
 
@@ -234,7 +236,7 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
             <button
               id="assessment-skip-btn"
               onClick={handleNext}
-              className="text-[#00535b] font-semibold text-sm sm:text-base hover:underline underline-offset-4 px-2 sm:px-3 py-2"
+              className="text-[#00535b] font-semibold text-sm sm:text-base hover:underline underline-offset-4 px-2 sm:px-3 py-2 cursor-pointer"
             >
               Skip for now
             </button>
@@ -242,9 +244,9 @@ export const AyurvedicAssessmentScreen: React.FC<AyurvedicAssessmentScreenProps>
             <button
               id="assessment-next-btn"
               onClick={handleNext}
-              className="bg-[#00535b] hover:bg-[#006d77] text-white rounded-xl px-6 sm:px-8 py-3 sm:py-3.5 font-bold text-sm sm:text-base shadow-[0px_4px_12px_rgba(0,109,119,0.15)] transition-all flex items-center gap-2 active:scale-[0.98]"
+              className="bg-[#00535b] hover:bg-[#006d77] text-white rounded-xl px-6 sm:px-8 py-3 sm:py-3.5 font-bold text-sm sm:text-base shadow-[0px_4px_12px_rgba(0,109,119,0.15)] transition-all flex items-center gap-2 active:scale-[0.98] cursor-pointer"
             >
-              <span>{currentQuestionIndex === AYURVEDIC_QUESTIONS.length - 1 ? 'Complete Intake' : 'Next'}</span>
+              <span>{currentQuestionIndex === AYURVEDIC_QUESTIONS.length - 1 ? t.continueBtn : 'Next'}</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>

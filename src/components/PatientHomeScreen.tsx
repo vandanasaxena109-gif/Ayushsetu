@@ -7,13 +7,10 @@ import {
   Headphones, 
   CheckCircle2, 
   ShieldCheck, 
-  Sparkles,
-  QrCode,
-  LogOut,
-  Calendar,
-  CreditCard
+  LogOut 
 } from 'lucide-react';
-import { LanguageOption, PatientAuthData, PatientProfile } from '../types';
+import { LanguageOption, PatientAuthData } from '../types';
+import { getTranslation } from '../data/translations';
 
 interface PatientHomeScreenProps {
   currentLanguage: LanguageOption;
@@ -36,6 +33,7 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
   onStaffHelp,
   onLogout,
 }) => {
+  const t = getTranslation(currentLanguage.id);
   const displayName = patientAuth.name || 'Riya Sharma';
 
   return (
@@ -52,7 +50,7 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-black text-[#141d1f]">
-                {currentLanguage.id === 'hi' ? `नमस्ते, ${displayName} 👋` : `Hello, ${displayName} 👋`}
+                {t.greeting}, {displayName} 👋
               </h1>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-[#3e494a] mt-0.5">
@@ -74,10 +72,10 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
         <button
           onClick={onLogout}
           title="End Session"
-          className="flex items-center gap-1.5 text-xs font-bold text-[#6f797a] hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-xl transition-colors border border-[#bec8ca]/30"
+          className="flex items-center gap-1.5 text-xs font-bold text-[#6f797a] hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-xl transition-colors border border-[#bec8ca]/30 cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">End Session</span>
+          <span className="hidden sm:inline">{t.logoutBtn}</span>
         </button>
       </header>
 
@@ -85,12 +83,10 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
       <div className="w-full max-w-4xl mx-auto my-auto py-6 sm:py-8 space-y-6">
         <div className="text-left">
           <h2 className="text-2xl font-black text-[#141d1f]">
-            {currentLanguage.id === 'hi' ? 'आप आज क्या करना चाहते हैं?' : 'How can AyushSetu assist you today?'}
+            How can AyushSetu assist you today?
           </h2>
           <p className="text-xs sm:text-sm text-[#3e494a]">
-            {currentLanguage.id === 'hi'
-              ? 'नया परामर्श शुरू करें या अपना पूर्व स्वास्थ्य रिकॉर्ड देखें।'
-              : 'Start a voice/touch health intake or review your linked ABDM records.'}
+            Start a voice or touch health intake, or review your linked health records.
           </p>
         </div>
 
@@ -106,21 +102,19 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
                 Voice • Touch • Scan
               </div>
               <h3 className="text-xl font-black text-[#141d1f] mb-1.5">
-                {currentLanguage.id === 'hi' ? '🩺 नया स्वास्थ्य परामर्श' : '🩺 Start New Health Visit'}
+                🩺 {t.startNewIntake}
               </h3>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'बताएं कि आप आज कैसा महसूस कर रहे हैं।'
-                  : "Tell us how you're feeling today in your language."}
+                {t.voiceIntakeSubtitle}
               </p>
             </div>
 
             <button
               id="btn-start-visit"
               onClick={onStartVisit}
-              className="mt-6 w-full min-h-[48px] bg-[#00535b] hover:bg-[#006d77] text-white py-2.5 px-4 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+              className="mt-6 w-full min-h-[48px] bg-[#00535b] hover:bg-[#006d77] text-white py-2.5 px-4 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
             >
-              <span>{currentLanguage.id === 'hi' ? 'परामर्श शुरू करें →' : 'Start Visit →'}</span>
+              <span>{t.startNewIntake} →</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -132,21 +126,19 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
                 <ClipboardList className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-black text-[#141d1f] mb-1.5">
-                {currentLanguage.id === 'hi' ? '📋 मेरा स्वास्थ्य इतिहास' : '📋 My Health History'}
+                📋 {t.patientHistory}
               </h3>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'अपने पिछले दौरे, दवाइयाँ और मेडिकल रिपोर्ट देखें।'
-                  : 'View your previous visits, past prescriptions, and scanned lab reports.'}
+                View your previous visits, past prescriptions, and scanned lab reports.
               </p>
             </div>
 
             <button
               id="btn-view-history"
               onClick={onViewHistory}
-              className="mt-6 w-full min-h-[48px] bg-[#ecf5f8] hover:bg-[#a9ece5]/40 text-[#00535b] py-2.5 px-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-[#00535b]/20"
+              className="mt-6 w-full min-h-[48px] bg-[#ecf5f8] hover:bg-[#a9ece5]/40 text-[#00535b] py-2.5 px-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-[#00535b]/20 cursor-pointer"
             >
-              <span>{currentLanguage.id === 'hi' ? 'इतिहास देखें' : 'View History'}</span>
+              <span>{t.patientHistory}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -158,21 +150,19 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
                 <UserCircle2 className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-black text-[#141d1f] mb-1.5">
-                {currentLanguage.id === 'hi' ? '👤 मेरी प्रोफ़ाइल' : '👤 My Profile'}
+                👤 {t.profile}
               </h3>
               <p className="text-xs sm:text-sm text-[#3e494a] leading-relaxed">
-                {currentLanguage.id === 'hi'
-                  ? 'व्यक्तिगत जानकारी, ABHA और आयुष्मान कार्ड का विवरण।'
-                  : 'Personal information, ABHA and Ayushman Bharat details.'}
+                Personal information, ABHA and Ayushman Bharat details.
               </p>
             </div>
 
             <button
               id="btn-view-profile"
               onClick={onViewProfile}
-              className="mt-6 w-full min-h-[48px] bg-[#ecf5f8] hover:bg-[#a9ece5]/40 text-[#00535b] py-2.5 px-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-[#00535b]/20"
+              className="mt-6 w-full min-h-[48px] bg-[#ecf5f8] hover:bg-[#a9ece5]/40 text-[#00535b] py-2.5 px-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-[#00535b]/20 cursor-pointer"
             >
-              <span>{currentLanguage.id === 'hi' ? 'प्रोफ़ाइल देखें' : 'View Profile'}</span>
+              <span>{t.profile}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -187,10 +177,10 @@ export const PatientHomeScreen: React.FC<PatientHomeScreenProps> = ({
         </div>
         <button
           onClick={onStaffHelp}
-          className="flex items-center gap-1.5 font-bold text-[#00535b] hover:bg-[#e6eff2] px-3.5 py-1.5 rounded-xl transition-colors"
+          className="flex items-center gap-1.5 font-bold text-[#00535b] hover:bg-[#e6eff2] px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer"
         >
           <Headphones className="w-4 h-4" />
-          <span>Need Help? 👨‍⚕️</span>
+          <span>{t.staffHelp} 👨‍⚕️</span>
         </button>
       </footer>
     </main>
