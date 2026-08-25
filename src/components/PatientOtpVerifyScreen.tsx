@@ -8,7 +8,11 @@ import {
   CheckCircle2, 
   AlertCircle,
   Sparkles,
-  Smartphone
+  Smartphone,
+  Send,
+  MessageSquare,
+  Copy,
+  Check
 } from 'lucide-react';
 import { LanguageOption, PatientAuthData } from '../types';
 import { getTranslation } from '../data/translations';
@@ -30,11 +34,22 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
 }) => {
   const t = getTranslation(currentLanguage.id);
   const displayPhone = phoneNumber || patientAuth?.phone || '98765 44582';
+  
+  const [generatedOtp, setGeneratedOtp] = useState<string>('445821');
   const [otp, setOtp] = useState('');
   const [countdown, setCountdown] = useState(30);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [error, setError] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [showSentNotification, setShowSentNotification] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  // Function to generate a new 6-digit OTP
+  const createNewOtp = () => {
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    return code;
+  };
 
   useEffect(() => {
     let timer: any;
@@ -44,9 +59,27 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
     return () => clearInterval(timer);
   }, [countdown]);
 
+  // Handle Send / Trigger OTP Button
+  const handleTriggerSendOtp = () => {
+    setIsSendingOtp(true);
+    setError('');
+    const newCode = createNewOtp();
+    
+    setTimeout(() => {
+      setGeneratedOtp(newCode);
+      setIsSendingOtp(false);
+      setShowSentNotification(true);
+      setCountdown(30);
+      setOtp('');
+    }, 500);
+  };
+
   const handleReadAloud = () => {
     setIsSpeaking(true);
-    const msg = `${t.otpTitle}. Sent to ${displayPhone}.`;
+    const spokenCode = generatedOtp.split('').join(' ');
+    const msg = currentLanguage.id === 'hi'
+      ? `${t.otpTitle}. मोबाइल ${displayPhone} पर ओटीपी भेजा गया है। आपका सत्यापन कोड है ${spokenCode}।`
+      : `${t.otpTitle}. OTP sent to ${displayPhone}. Your verification code is ${spokenCode}.`;
     
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -60,28 +93,35 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
     }
   };
 
-  const handleAutoFillDemo = () => {
-    setOtp('445821');
+  const handleAutoFill = () => {
+    setOtp(generatedOtp);
     setError('');
+  };
+
+  const handleCopyOtp = () => {
+    navigator.clipboard?.writeText(generatedOtp);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (otp.length !== 6) {
-      setError(currentLanguage.id === 'hi' ? 'कृपया 6 अंकों का ओटीपी दर्ज करें' : 'Please enter 6-digit OTP');
+      setError(currentLanguage.id === 'hi' ? 'कृपया 6 अंकों का पूरा ओटीपी दर्ज करें' : 'Please enter the complete 6-digit OTP');
       return;
     }
+
+    // Accept generated OTP or fallback 445821
+    if (otp !== generatedOtp && otp !== '445821' && otp !== '123456') {
+      setError(currentLanguage.id === 'hi' ? `गलत ओटीपी दर्ज किया गया। सक्रिय कोड ${generatedOtp} है।` : `Invalid OTP. The active code is ${generatedOtp}.`);
+      return;
+    }
+
     setIsVerifying(true);
     setTimeout(() => {
       setIsVerifying(false);
       onVerifySuccess();
     }, 600);
-  };
-
-  const handleResend = () => {
-    setCountdown(30);
-    setOtp('');
-    setError('');
   };
 
   return (
@@ -106,7 +146,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
 
       {/* Main Card */}
       <div className="w-full max-w-md mx-auto my-auto bg-white rounded-3xl p-6 sm:p-8 shadow-[0px_6px_24px_rgba(0,109,119,0.06)] border border-[#bec8ca]/30">
-        <div className="text-center mb-6">
+        <div className="text-center mb-5">
           <div className="w-14 h-14 rounded-2xl bg-[#00535b] text-white flex items-center justify-center mx-auto mb-3 shadow-md">
             <Smartphone className="w-7 h-7" />
           </div>
@@ -114,34 +154,94 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
             {t.otpTitle}
           </h1>
           <p className="text-xs sm:text-sm text-[#3e494a] mt-1 font-medium">
-            {t.otpSubtitle} {displayPhone}
+            {t.otpSubtitle} <strong className="text-[#141d1f] font-bold">+{displayPhone}</strong>
           </p>
         </div>
 
-        {/* Read Aloud Button for Accessibility */}
-        <div className="mb-6 flex justify-center">
+        {/* Dynamic 'OTP Sent' Notification Banner */}
+        {showSentNotification && (
+          <div 
+            id="otp-sent-notification-banner"
+            className="mb-5 bg-[#00535b]/10 border border-[#00535b]/25 rounded-2xl p-3.5 transition-all animate-in fade-in slide-in-from-top-2 duration-300"
+          >
+            <div className="flex items-start gap-2.5">
+              <div className="w-7 h-7 rounded-full bg-[#00535b] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-[#00535b] tracking-wide uppercase">
+                    {t.otpSentNotification}
+                  </span>
+                  <span className="text-[10px] font-bold text-[#00535b]/70 bg-white px-2 py-0.5 rounded-md border border-[#00535b]/20">
+                    SMS Gateway
+                  </span>
+                </div>
+                <div className="mt-2 bg-white/90 p-2.5 rounded-xl border border-[#bec8ca]/40">
+                  <div className="flex items-center justify-between text-[11px] text-[#3e494a] mb-1">
+                    <span className="font-semibold flex items-center gap-1">
+                      <MessageSquare className="w-3.5 h-3.5 text-[#00535b]" />
+                      [AyushSetu SMS]
+                    </span>
+                    <span className="text-[10px] text-gray-500 font-mono">Just now</span>
+                  </div>
+                  <p className="text-xs text-[#141d1f] font-medium leading-tight">
+                    {t.otpReceivedMsg} <strong className="font-mono text-sm tracking-widest text-[#00535b] bg-[#a9ece5]/30 px-2 py-0.5 rounded ml-1">{generatedOtp}</strong>
+                  </p>
+                  
+                  {/* Quick Action in Notification */}
+                  <div className="mt-2 flex items-center gap-2 pt-1 border-t border-[#bec8ca]/30">
+                    <button
+                      type="button"
+                      onClick={handleAutoFill}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-1 px-2.5 bg-[#00535b] hover:bg-[#006d77] text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-95"
+                    >
+                      <Sparkles className="w-3 h-3 text-[#a9ece5]" />
+                      Auto-fill ({generatedOtp})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCopyOtp}
+                      title="Copy OTP"
+                      className="flex items-center justify-center py-1 px-2.5 bg-[#f2fbfe] hover:bg-[#e6eff2] text-[#00535b] border border-[#00535b]/20 rounded-lg text-xs font-semibold transition-all cursor-pointer"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Bar: Trigger Send OTP Button & Voice readout */}
+        <div className="mb-5 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            id="btn-trigger-send-otp"
+            onClick={handleTriggerSendOtp}
+            disabled={isSendingOtp}
+            className="flex items-center justify-center gap-1.5 text-xs font-bold py-2.5 px-3 rounded-xl border border-[#00535b]/30 bg-[#f2fbfe] hover:bg-[#a9ece5]/30 text-[#00535b] transition-all cursor-pointer disabled:opacity-50"
+          >
+            {isSendingOtp ? (
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <Send className="w-3.5 h-3.5 text-[#00535b]" />
+            )}
+            <span>{isSendingOtp ? 'Sending...' : t.sendOtpBtn || 'Send OTP SMS'}</span>
+          </button>
+
           <button
             type="button"
             onClick={handleReadAloud}
-            className={`flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl transition-all border cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 text-xs font-bold py-2.5 px-3 rounded-xl transition-all border cursor-pointer ${
               isSpeaking
                 ? 'bg-amber-100 text-amber-900 border-amber-300 animate-pulse'
-                : 'bg-[#f2fbfe] text-[#00535b] border-[#bec8ca]/50 hover:bg-[#e6eff2]'
+                : 'bg-[#f2fbfe] text-[#00535b] border-[#00535b]/30 hover:bg-[#e6eff2]'
             }`}
           >
-            <Volume2 className="w-4 h-4 text-[#00535b]" />
-            <span>{isSpeaking ? 'Reading aloud...' : '🔊 Read OTP instructions aloud'}</span>
-          </button>
-        </div>
-
-        {/* Quick Fill Demo Chip */}
-        <div className="mb-4 text-center">
-          <button
-            type="button"
-            onClick={handleAutoFillDemo}
-            className="inline-flex items-center gap-1.5 text-xs text-[#00535b] font-bold bg-[#a9ece5]/30 hover:bg-[#a9ece5]/60 px-3 py-1 rounded-lg transition-colors border border-[#00535b]/20 cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5" /> Auto-fill Demo OTP (445821)
+            <Volume2 className="w-3.5 h-3.5 text-[#00535b]" />
+            <span>{isSpeaking ? 'Reading...' : '🔊 Read OTP'}</span>
           </button>
         </div>
 
@@ -156,6 +256,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
             <input
               id="otp-input"
               type="text"
+              inputMode="numeric"
               maxLength={6}
               value={otp}
               onChange={(e) => {
@@ -164,11 +265,11 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
                 if (error) setError('');
               }}
               placeholder="••••••"
-              className="w-full text-center text-2xl tracking-[0.4em] font-black py-3 rounded-2xl border border-[#bec8ca]/70 bg-[#fbfdfd] focus:border-[#00535b] focus:ring-4 focus:ring-[#00535b]/20 focus:outline-none"
+              className="w-full text-center text-2xl tracking-[0.4em] font-black py-3 rounded-2xl border border-[#bec8ca]/70 bg-[#fbfdfd] focus:border-[#00535b] focus:ring-4 focus:ring-[#00535b]/20 focus:outline-none transition-all"
             />
             {error && (
-              <p className="text-xs text-red-600 text-center mt-1.5 flex items-center justify-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" /> {error}
+              <p className="text-xs text-red-600 text-center mt-2 flex items-center justify-center gap-1 font-semibold">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" /> {error}
               </p>
             )}
           </div>
@@ -176,7 +277,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
           <button
             id="btn-verify-otp"
             type="submit"
-            disabled={isVerifying}
+            disabled={isVerifying || otp.length === 0}
             className="w-full min-h-[50px] bg-[#00535b] hover:bg-[#006d77] text-white py-3 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
           >
             {isVerifying ? (
@@ -200,7 +301,7 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
             ) : (
               <button
                 type="button"
-                onClick={handleResend}
+                onClick={handleTriggerSendOtp}
                 className="text-xs font-bold text-[#00535b] hover:underline flex items-center justify-center gap-1 mx-auto cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5" /> {t.resendOtp}
@@ -218,3 +319,4 @@ export const PatientOtpVerifyScreen: React.FC<PatientOtpVerifyScreenProps> = ({
     </main>
   );
 };
+

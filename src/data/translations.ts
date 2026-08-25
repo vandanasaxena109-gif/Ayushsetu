@@ -64,6 +64,8 @@ export interface TranslationDict {
   skipDoc: string;
   ayurvedicTitle: string;
   ayurvedicSubtitle: string;
+  ayurvedicAssessmentTitle: string;
+  ayurvedicAssessmentSubtitle: string;
   reviewTitle: string;
   reviewSubtitle: string;
   confirmSubmit: string;
@@ -71,11 +73,31 @@ export interface TranslationDict {
   intakeCompleteSubtitle: string;
   tokenNumber: string;
   queueStatus: string;
+  queueToken: string;
+  waitTime: string;
+  consultDoctorBtn: string;
+  doctorDashboard: string;
   doctorDashboardTitle: string;
   waitingQueue: string;
+  logoutBtn: string;
+  patientSummaryTitle: string;
+  patientSummarySubtitle: string;
+  sendToDoctorBtn: string;
+  greeting: string;
+  startNewIntake: string;
+  patientHistory: string;
+  profile: string;
+  required: string;
+  otpTitle: string;
+  otpSubtitle: string;
+  enterOtp: string;
+  otpSentNotification: string;
+  sendOtpBtn: string;
+  simulatedSmsBanner: string;
+  otpReceivedMsg: string;
 }
 
-export const TRANSLATIONS: Record<LanguageId, TranslationDict> = {
+export const TRANSLATIONS: Record<LanguageId, Partial<TranslationDict>> = {
   en: {
     appName: 'AyushSetu',
     tagline: 'Your health history, ready before you meet the doctor.',
@@ -147,8 +169,30 @@ export const TRANSLATIONS: Record<LanguageId, TranslationDict> = {
     intakeCompleteSubtitle: 'Your case summary has been sent directly to the doctor’s workstation.',
     tokenNumber: 'Your OPD Token Number',
     queueStatus: 'Estimated Waiting Time',
+    queueToken: 'Queue Token',
+    waitTime: 'Wait Time',
+    consultDoctorBtn: 'Consult with Doctor',
+    doctorDashboard: 'Doctor Dashboard',
     doctorDashboardTitle: 'Ayush Doctor Clinical Dashboard',
     waitingQueue: 'Patient Triage Queue',
+    ayurvedicAssessmentTitle: 'Ayurvedic Health & Dosha Assessment',
+    ayurvedicAssessmentSubtitle: 'Answer simple lifestyle and digestion questions for personalized care.',
+    logoutBtn: 'End Session & Exit',
+    patientSummaryTitle: 'Pre-Consultation Summary',
+    patientSummarySubtitle: 'Review your clinical data before final submission.',
+    sendToDoctorBtn: 'Send to Doctor',
+    greeting: 'Hello',
+    startNewIntake: 'Start New Intake',
+    patientHistory: 'Medical History',
+    profile: 'Profile Details',
+    required: 'Required',
+    otpTitle: 'Mobile Verification',
+    otpSubtitle: 'Enter OTP sent to your phone',
+    enterOtp: 'Enter 6-digit OTP',
+    otpSentNotification: 'OTP sent successfully! Check your phone messages.',
+    sendOtpBtn: 'Send OTP via SMS',
+    simulatedSmsBanner: 'Simulated SMS Gateway Delivery',
+    otpReceivedMsg: 'Your AyushSetu verification code is:',
   },
   hi: {
     appName: 'आयुष सेतु',
@@ -221,8 +265,30 @@ export const TRANSLATIONS: Record<LanguageId, TranslationDict> = {
     intakeCompleteSubtitle: 'आपका केस विवरण डॉक्टर की स्क्रीन पर भेज दिया गया है।',
     tokenNumber: 'आपका ओपीडी टोकन नंबर',
     queueStatus: 'अनुमानित प्रतीक्षा समय',
+    queueToken: 'कतार टोकन',
+    waitTime: 'प्रतीक्षा समय',
+    consultDoctorBtn: 'डॉक्टर से परामर्श करें',
+    doctorDashboard: 'डॉक्टर डैशबोर्ड',
     doctorDashboardTitle: 'आयुष चिकित्सक डैशबोर्ड',
     waitingQueue: 'प्रतीक्षारत मरीज़ों की सूची',
+    ayurvedicAssessmentTitle: 'आयुर्वेदिक प्रकृति व दिनचर्या परीक्षण',
+    ayurvedicAssessmentSubtitle: 'पाचन, नींद और मानसिक स्वास्थ्य संबंधी सरल प्रश्नों के उत्तर दें।',
+    logoutBtn: 'सत्र समाप्त करें',
+    patientSummaryTitle: 'पूर्व-परामर्श सारांश',
+    patientSummarySubtitle: 'डॉक्टर को भेजने से पहले अपने लक्षणों और पर्चों की पुष्टि करें।',
+    sendToDoctorBtn: 'डॉक्टर को भेजें',
+    greeting: 'नमस्ते',
+    startNewIntake: 'नया विवरण दर्ज करें',
+    patientHistory: 'पिछला इतिहास',
+    profile: 'प्रोफ़ाइल विवरण',
+    required: 'आवश्यक',
+    otpTitle: 'मोबाइल सत्यापन',
+    otpSubtitle: 'अपने फोन पर आया ओटीपी दर्ज करें',
+    enterOtp: '6 अंकों का ओटीपी दर्ज करें',
+    otpSentNotification: 'ओटीपी सफलतापूर्वक भेजा गया! अपने संदेश बॉक्स में देखें।',
+    sendOtpBtn: 'ओटीपी एसएमएस भेजें',
+    simulatedSmsBanner: 'सिम्युलेटेड एसएमएस गेटवे डिलीवरी',
+    otpReceivedMsg: 'आपका आयुष सेतु सत्यापन कोड है:',
   },
   mr: {
     appName: 'आयुष सेतु',
@@ -967,5 +1033,6 @@ export const TRANSLATIONS: Record<LanguageId, TranslationDict> = {
 };
 
 export const getTranslation = (langId: LanguageId): TranslationDict => {
-  return TRANSLATIONS[langId] || TRANSLATIONS.en;
+  const selected = TRANSLATIONS[langId] || TRANSLATIONS.en;
+  return { ...TRANSLATIONS.en, ...selected } as TranslationDict;
 };

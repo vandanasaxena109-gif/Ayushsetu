@@ -19,7 +19,7 @@ import {
   Check,
   Globe
 } from 'lucide-react';
-import { DocumentScanRecord, LanguageOption } from '../types';
+import { DocumentScanRecord, LanguageOption, LanguageId } from '../types';
 import { getTranslation } from '../data/translations';
 
 interface DocumentScannerScreenProps {
@@ -31,8 +31,10 @@ interface DocumentScannerScreenProps {
 
 type DocType = 'Prescription' | 'Lab Report' | 'Discharge Summary' | 'Other';
 
+const defaultLang: LanguageOption = { id: 'hi', name: 'Hindi', nativeName: 'हिंदी' };
+
 export const DocumentScannerScreen: React.FC<DocumentScannerScreenProps> = ({
-  currentLanguage = { id: 'hi', name: 'Hindi', nativeName: 'हिंदी' },
+  currentLanguage = defaultLang,
   onScanComplete,
   onSkip,
   onClose,
